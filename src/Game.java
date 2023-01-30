@@ -2,6 +2,11 @@ public class Game {
     private Room currentRoom;
     private Parser parser;
     private Player player;
+    private Room house;
+    private Room school;
+    private Room mall;
+    private Room cousinsHouse;
+    private Room museum;
 
     public Game(){
         parser = new Parser();
@@ -13,23 +18,31 @@ public class Game {
        game.play();
     }
     private void createRooms(){
-        Room school = new Room("This is the school she attends.", "She is in her junior year at this school, and she attends all 6 periods every day, somewhere in the school is a paper with her schedule. her locker is in the building. she has two lockers one for all her books and one for her practice and personal bag, they are the only two unlocked lockers in the building. ");
-        Room house = new Room("This is where the girl and her family live.", "In this house, she has a few items left behind all around the house that could help find her location. Track down her thought process and try to find her.");
-        Room mall = new Room("The mall in front of her house.", "She visits this mall regularly in her free time whenever she could. She likes to go to the mall with her friends or family to keep her company. She has a few favorite stores she always goes to when she's there. Find the directory and her favorite places are all highlighted.");
-        Room cousinsHouse = new Room("Where her first cousin on her dad's side lives.", "She'd love to visit her cousin's place all the time since it is close to her house, her cousin was like a mother figure to her. They'd always hangout at her house whenever they were both free with mutual friends or other cousins to bond and spend time together.");
-        Room museum = new Room("The museum is a place where she'd always wanted to go to.", "The museum displays lots of artworks that she was interested in. She finds joy and comfort in looking at artworks but also feels ashamed and doubtful since she thinks she can't be as good as they are.");
+         school = new Room("This is the school she attends.", "She is in her junior year at this school, and she attends all 6 periods every day, " +
+                "Somewhere in the school is a paper with her schedule. Her locker is in the building." +
+                " She has two lockers one for all her books and one for her practice and personal bag," +
+                " they are the only two unlocked lockers in the building. ");
+        house = new Room("This is where the girl and her family live.", "In this house, she has a few items left behind all around the house" +
+                " She is locked up in the museum. Find the key and save her.");
+         mall = new Room("The mall in front of her house.", "She visits this mall regularly in her free time whenever she could." +
+                " She likes to go to the mall with her friends or family to keep her company." +
+                " She has a few favorite stores she always goes to when she's there. " +
+                "Find the directory and her favorite places are all highlighted.");
+         cousinsHouse = new Room("Where her first cousin on her dad's side lives.", "She'd love to visit her cousin's place all the time since it is close to her house," +
+                " her cousin was like a mother figure to her. They'd always hangout at her house whenever they were both free" +
+                " with mutual friends or other cousins to bond and spend time together.");
+         museum = new Room("The museum is a place where she'd always wanted to go to.", "The museum displays lots of artworks that she was interested in." +
+                " She finds joy and comfort in looking at artworks but also feels ashamed and doubtful " +
+                "since she thinks she can't be as good as they are.");
 
         house.setExit("north", mall);
         house.setExit("west", cousinsHouse);
         cousinsHouse.setExit("east", mall);
         cousinsHouse.setExit("south", house);
         cousinsHouse.setExit("west", school);
-        school.setExit("east", cousinsHouse);
-        school.setExit("south", house);
         mall.setExit("south", house);
         mall.setExit("west", cousinsHouse);
         mall.setExit("east", museum);
-        museum.setExit("west", mall);
 
         Item letter = new Item();
         Item bed = new Item();
@@ -39,6 +52,8 @@ public class Game {
         Item map = new Item();
         Item car = new Item();
         Item carKeys = new Item();
+        Item roomKey = new Item();
+        school.setItem("roomKey", roomKey);
         player.setItem("letter", letter);
         player.setItem("phone", phone);
         cousinsHouse.setItem("iPad",iPad);
@@ -86,6 +101,9 @@ public class Game {
                 break;
             case DRIVE:
                 drive(command);
+                break;
+            case OPEN:
+                open(command);
                 break;
         }
         return wantToQuit;
@@ -147,18 +165,30 @@ public class Game {
             System.out.println(currentRoom.getShortDescription());
         }
     }
-    public void drive(Command command){
-        if(!command.hasSecondWord()){
-            System.out.println("Drive where?");
+    public void drive(Command command) {
+        if (!player.getInv().containsKey("carKeys")) {
+            System.out.println("You need carKeys to drive.");
             return;
+        } else {
+            String direction = command.getSecondWord();
+            Room nextRoom = currentRoom.getExit(direction);
+            school.setExit("east", cousinsHouse);
+            school.setExit("south", house);
+            museum.setExit("west", mall);
+            if (nextRoom == null) {
+                System.out.println("There is no road!");
+            } else {
+                currentRoom = nextRoom;
+                System.out.println(currentRoom.getShortDescription());
+            }
         }
-        String direction = command.getSecondWord();
-        Room nextRoom = currentRoom.getExit(direction);
-        if(nextRoom == null){
-            System.out.println("There is no road!");
-        }else{
-            currentRoom = nextRoom;
-            System.out.println(currentRoom.getShortDescription());
+    }
+    public void open(Command command){
+        if(command.hasSecondWord()){
+            System.out.println("You can't open "+ command.getSecondWord());
+            return;
+        }else {
+
         }
     }
     private boolean quit(Command command) {
@@ -177,5 +207,6 @@ public class Game {
         System.out.println("Type\"help\" if you need assistance");
         System.out.println();
         System.out.println("We will print a long room description here");
+        System.out.println("Win conditions: ");
     }
 }

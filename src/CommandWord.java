@@ -7,7 +7,8 @@ public enum CommandWord {
     LOOK("look"),
     GRAB("grab"),
     DROP("drop"),
-    DRIVE("drive");
+    DRIVE("drive"),
+    OPEN("open");
 
     private String commandString;
     CommandWord(String commandString){

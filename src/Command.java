@@ -17,4 +17,5 @@ public class Command {
     public boolean isUnknown(){
         return (commandWord == CommandWord.UNKNOWN);
     }
+
 }
