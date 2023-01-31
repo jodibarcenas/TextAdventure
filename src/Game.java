@@ -7,6 +7,7 @@ public class Game {
     private Room mall;
     private Room cousinsHouse;
     private Room museum;
+    boolean wantToQuit = false;
 
     public Game(){
         parser = new Parser();
@@ -31,18 +32,18 @@ public class Game {
          cousinsHouse = new Room("Where her first cousin on her dad's side lives.", "She'd love to visit her cousin's place all the time since it is close to her house," +
                 " her cousin was like a mother figure to her. They'd always hangout at her house whenever they were both free" +
                 " with mutual friends or other cousins to bond and spend time together.");
-         museum = new Room("The museum is a place where she'd always wanted to go to.", "The museum displays lots of artworks that she was interested in." +
+         museum = new Room("You are in the museum, You found her!", "The museum displays lots of artworks that she was interested in." +
                 " She finds joy and comfort in looking at artworks but also feels ashamed and doubtful " +
-                "since she thinks she can't be as good as they are.");
+                "since she thinks she can't be as good as they are." +
+                 " She's been hiding here because she was ashamed and wanted to get better.");
 
         house.setExit("north", mall);
         house.setExit("west", cousinsHouse);
         cousinsHouse.setExit("east", mall);
         cousinsHouse.setExit("south", house);
-        cousinsHouse.setExit("west", school);
         mall.setExit("south", house);
         mall.setExit("west", cousinsHouse);
-        mall.setExit("east", museum);
+
 
         Item letter = new Item();
         Item bed = new Item();
@@ -52,8 +53,10 @@ public class Game {
         Item map = new Item();
         Item car = new Item();
         Item carKeys = new Item();
-        Item roomKey = new Item();
-        school.setItem("roomKey", roomKey);
+        Item roomKey1 = new Item();
+        Item roomKey2 = new Item();
+        school.setItem("roomKey2", roomKey2);
+        school.setItem("roomKey1", roomKey1);
         player.setItem("letter", letter);
         player.setItem("phone", phone);
         cousinsHouse.setItem("iPad",iPad);
@@ -75,7 +78,7 @@ public class Game {
         System.out.println("Thanks for playing!");
     }
     private boolean processCommand(Command command){
-        boolean wantToQuit = false;
+        wantToQuit = false;
         CommandWord commandWord = command.getCommandWord();
         switch(commandWord){
             case UNKNOWN:
@@ -101,9 +104,6 @@ public class Game {
                 break;
             case DRIVE:
                 drive(command);
-                break;
-            case OPEN:
-                open(command);
                 break;
         }
         return wantToQuit;
@@ -135,6 +135,12 @@ public class Game {
         }else{
             player.setItem(key, grabItem);
             System.out.println("You grabbed " + key);
+        }
+        if(player.getInv().containsKey("roomKey1")){
+            System.out.println("You died.");
+            wantToQuit = true;
+        }else {
+            return;
         }
     }
     private void drop(Command command){
@@ -172,6 +178,7 @@ public class Game {
         } else {
             String direction = command.getSecondWord();
             Room nextRoom = currentRoom.getExit(direction);
+            cousinsHouse.setExit("west", school);
             school.setExit("east", cousinsHouse);
             school.setExit("south", house);
             museum.setExit("west", mall);
@@ -181,16 +188,14 @@ public class Game {
                 currentRoom = nextRoom;
                 System.out.println(currentRoom.getShortDescription());
             }
+            if(player.getInv().containsKey("roomKey2")){
+                mall.setExit("east", museum);
+            }else {
+                return;
+            }
         }
     }
-    public void open(Command command){
-        if(command.hasSecondWord()){
-            System.out.println("You can't open "+ command.getSecondWord());
-            return;
-        }else {
 
-        }
-    }
     private boolean quit(Command command) {
         if (command.hasSecondWord()) {
             System.out.println("You can't quit " + command.getSecondWord());
@@ -207,6 +212,7 @@ public class Game {
         System.out.println("Type\"help\" if you need assistance");
         System.out.println();
         System.out.println("We will print a long room description here");
-        System.out.println("Win conditions: ");
+        System.out.println("Win conditions: you find the missing girl.");
+        System.out.println("Lose conditions: Grabbing the wrong object.");
     }
 }
