@@ -19,12 +19,14 @@ public class Game {
        game.play();
     }
     private void createRooms(){
-         school = new Room("This is the school she attends.", "She is in her junior year at this school, and she attends all 6 periods every day, " +
+         school = new Room("This is the school she attends.", "She is in her junior year at this school," +
+                 " and she attends all 6 periods every day, " +
                 "Somewhere in the school is a paper with her schedule. Her locker is in the building." +
                 " She has two lockers one for all her books and one for her practice and personal bag," +
                 " they are the only two unlocked lockers in the building. ");
         house = new Room("This is where the girl and her family live.", "In this house, she has a few items left behind all around the house" +
-                " She is locked up in the museum. Find the key and save her.");
+                " She is locked up in the museum. Find the key and save her." +
+                "There are some places that you can't go to without a car.");
          mall = new Room("The mall in front of her house.", "She visits this mall regularly in her free time whenever she could." +
                 " She likes to go to the mall with her friends or family to keep her company." +
                 " She has a few favorite stores she always goes to when she's there. " +
@@ -52,16 +54,18 @@ public class Game {
         Item iPad = new Item();
         Item map = new Item();
         Item car = new Item();
+        Item directory = new Item();
         Item carKeys = new Item();
         Item roomKey1 = new Item();
         Item roomKey2 = new Item();
-        school.setItem("roomKey2", roomKey2);
-        school.setItem("roomKey1", roomKey1);
+        mall.setItem("directory", directory);
         player.setItem("letter", letter);
         player.setItem("phone", phone);
         cousinsHouse.setItem("iPad",iPad);
         house.setItem("bed", bed);
         school.setItem("notebook", notebook);
+        school.setItem("roomKey1", roomKey1);
+        school.setItem("roomKey2", roomKey2);
         house.setItem("map", map);
         house.setItem("car", car);
         house.setItem("carKeys", carKeys);
@@ -191,6 +195,11 @@ public class Game {
             if(player.getInv().containsKey("roomKey2")){
                 mall.setExit("east", museum);
             }else {
+                return;
+            }
+            if(currentRoom == museum){
+                wantToQuit = true;
+            } else{
                 return;
             }
         }
