@@ -20,18 +20,15 @@ public class Game {
     }
     private void createRooms(){
          school = new Room("This is the school she attends.", "She is in her junior year at this school," +
-                 " and she attends all 6 periods every day, " +
-                "Somewhere in the school is a paper with her schedule. Her locker is in the building." +
                 " She has two lockers one for all her books and one for her practice and personal bag," +
-                " they are the only two unlocked lockers in the building. ");
+                " the lockers are open and there are two keys, pick the correct key to use to open the museum.");
         house = new Room("This is where the girl and her family live.", "In this house, she has a few items left behind all around the house" +
                 " She is locked up in the museum. Find the key and save her." +
                 "There are some places that you can't go to without a car.");
          mall = new Room("The mall in front of her house.", "She visits this mall regularly in her free time whenever she could." +
                 " She likes to go to the mall with her friends or family to keep her company." +
-                " She has a few favorite stores she always goes to when she's there. " +
-                "Find the directory and her favorite places are all highlighted.");
-         cousinsHouse = new Room("Where her first cousin on her dad's side lives.", "She'd love to visit her cousin's place all the time since it is close to her house," +
+                " She has a few favorite stores she always goes to when she's there. ");
+         cousinsHouse = new Room("This is where her cousin lives.", "She'd love to visit her cousin's place all the time since it is close to her house," +
                 " her cousin was like a mother figure to her. They'd always hangout at her house whenever they were both free" +
                 " with mutual friends or other cousins to bond and spend time together.");
          museum = new Room("You are in the museum, You found her!", "The museum displays lots of artworks that she was interested in." +
